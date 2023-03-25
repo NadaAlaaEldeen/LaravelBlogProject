@@ -14,7 +14,7 @@ class PostController extends Controller
     {
       
         // select * from posts
-        $allPosts=Post::paginate(3);
+        $allPosts=Post::paginate(5);
         // $allPosts=Post::cursorPaginate(3);
         // $allPosts=Post::simplePaginate(3);
 
