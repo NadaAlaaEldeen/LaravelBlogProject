@@ -2,72 +2,88 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
-
+// use Illuminate\Support\Facades\DB;
+// use Illuminate\Support\HtmlString;
 class PostController extends Controller
 {
+    //method return all posts
     public function index()
     {
-        $allPosts = [
-            [
-                'id' => 1,
-                'title' => 'Laravel',
-                'posted_by' => 'Ahmed',
-                'created_at' => '2022-08-01 10:00:00'
-            ],
-
-            [
-                'id' => 2,
-                'title' => 'PHP',
-                'posted_by' => 'Mohamed',
-                'created_at' => '2022-08-01 10:00:00'
-            ],
-
-            [
-                'id' => 3,
-                'title' => 'Javascript',
-                'posted_by' => 'Ali',
-                'created_at' => '2022-08-01 10:00:00'
-            ],
-        ];
+      
+        // select * from posts
+        $allPosts=Post::paginate(3);
+        // $allPosts=Post::cursorPaginate(3);
+        // $allPosts=Post::simplePaginate(3);
 
         return view('post.index', ['posts' => $allPosts]);
+        
     }
 
-    public function show($id)
+    public function show($id)//method return single post
     {
-//        dd($id);
-        $post =  [
-            'id' => 3,
-            'title' => 'Javascript',
-            'posted_by' => 'Ali',
-            'created_at' => '2022-08-01 10:00:00',
-            'description' => 'hello description',
-        ];
+     //        dd($id);
 
-//        dd($post);
+      //dynamic data
+      $post=Post::find($id);//select *from posts where id=1 limit 1
+    //$post=Post::where('id'=$id)-> get(); //collection object .....select * from posts where id=1;
+    //$post=Post::where('id'=$id)-> (); //post model object .....select * from posts where id=1 limit 1;
+    /*
+    // example
+    $post=Post::where('title'='laravel')->where('description'='framework')-> get();
+    */
+       
+  
 
         return view('post.show', ['post' => $post]);
     }
-
+   
+    //create new post 
     public function create()
     {
-        // return"create post";
-        return view('post.create');
-    }    
-    public function update($posts)
-    { 
-        $posts = 
-            [
-                'id' => 1,
-                'title' => 'Laravel',
-                'posted_by' => 'Ahmed',
-                'created_at' => '2022-08-01 10:00:00'
-            
-        ];
+        $users=User::all();
         
-        // return"create post";
-        return view('post.update', ['post' => $posts]);
+        return view('post.create',['users' =>$users]);
+    }    
+    public function edit(Request $request,$id)
+    { 
+        $posts=Post::find($id);
+        $users=User::All();
+         
+        return view('post.update', ['post' => $posts,'users'=>$users]);
        
     }
+
+    public function update($post,Request $request)
+    {
+        $Post=Post::find($post);
+        $Post->update([
+            'title'=>$request->title,
+            'description'=>$request->description,
+        ]);
+        return redirect()->route('posts.index');
+    }    
+    public function destroy($post)
+    {
+     Post::where('id',"$post")->delete();
+     return redirect()->route('posts.index');
+    }    
+    public function store(Request $request)
+    {
+    //get data from the form
+    $data = request()->all();
+     //insert the data in data base
+    Post::create([
+       'title' =>$request->title,
+        'description' =>$request->description, 
+         'user_id' =>$request->post_creator,
+    ]);
+    //redirect to index action
+    //return to_route('posts.index');
+      return redirect()->route('posts.index');
+    }  
+
+//----------------------------------------------------------------- 
 }

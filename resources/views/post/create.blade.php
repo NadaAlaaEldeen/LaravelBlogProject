@@ -6,6 +6,6 @@
 
 @section('btn-name') create  @endsection
 
-@section('action') {{route('posts.index')}} @endsection
+@section('formaction') {{route('posts.store')}} @endsection
 
 
