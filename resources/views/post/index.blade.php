@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title') Index @endsection
+@section('title') Posts @endsection
 
 @section('content')
     <div class="text-center col-10 offset-1">

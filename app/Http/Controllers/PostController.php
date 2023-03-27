@@ -29,14 +29,6 @@ class PostController extends Controller
       //dynamic data
       $post=Post::find($id);//select *from posts where id=1 limit 1
     //$post=Post::where('id'=$id)-> get(); //collection object .....select * from posts where id=1;
-    //$post=Post::where('id'=$id)-> (); //post model object .....select * from posts where id=1 limit 1;
-    /*
-    // example
-    $post=Post::where('title'='laravel')->where('description'='framework')-> get();
-    */
-       
-  
-
         return view('post.show', ['post' => $post]);
     }
    
