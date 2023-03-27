@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Route;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
+use App\Http\Controllers\CommentController;
+use GuzzleHttp\Middleware;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,15 +46,16 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 // ---------------OAuth with google And github---------------
  
+
 Route::get('/auth/redirect', function () {
+    // dd('stop');
     return Socialite::driver('github')->redirect();
 });
- 
 
- 
 Route::get('/auth/callback', function () {
+    $user = Socialite::driver('github')->stateless()->user();
     $githubUser = Socialite::driver('github')->user();
- 
+
     $user = User::updateOrCreate([
         'github_id' => $githubUser->id,
     ], [
@@ -62,15 +65,30 @@ Route::get('/auth/callback', function () {
         'github_refresh_token' => $githubUser->refreshToken,
     ]);
  
-    Auth::login($githubUser);
-  
+    Auth::login($user);
+ 
 });
-// Route::get('/auth/redirect', function () {
-//     return Socialite::driver('google')->redirect();
-// });
+
+
+//---------------------login with google
+Route::get('/auth/google/redirect', function () {
+
+    return Socialite::driver('google')->redirect();
+});
+
+Route::get('/auth/callback', function () {
+    $user = Socialite::driver('google')->stateless()->user();
+    $googleUser = Socialite::driver('google')->user();
  
-// Route::get('/auth/callback', function () {
-//     $user = Socialite::driver('google')->user();
+    $user = User::updateOrCreate([
+        'google_id' => $googleUser->id,
+    ], [
+        'name' => $googleUser->name,
+        'email' => $googleUser->email,
+        'google_token' => $googleUser->token,
+        'google_refresh_token' => $googleUser->refreshToken,
+    ]);
  
-//     // $user->token
-// });
+    Auth::login($user);
+   
+});

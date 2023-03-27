@@ -17,6 +17,9 @@
         <div class="card-header">
             Post Creator Info
         </div>
+        @if($post->image)
+            <img src="{{Storage::url($post->image)}}" width="250px"   alt="{{$post->image}}">
+        @endif
         <div class="card-body">
             <h5 class="card-title">Name:{{$post->user->name}}</h5>
             <h5 class="card-title">Email:{{$post->user->email}}</h5>
@@ -44,26 +47,20 @@
     <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
       <div class="accordion-body">
 
+      @foreach($post->comments as $comment)
        <div class="comment py-2">
-        <h6 style="display: inline;" class="">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad, saepe amet perferendis, fugiat dolore obcaecati commodi corrupti ab ipsa cum est. Aliquid, cupiditate? Mollitia, cumque accusamus eius maxime debitis natus!</h6> 
-        <a href="#" class="btn btn-info">View</a>
-        <a href="#" class="btn btn-primary">Edit</a>
-        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
-         Delete
-        </button>
-        <sub> created by at </sub>
+        <h6 style="display: inline;" class="">{{$comment->body}}</h6> 
+        <button type="submit" name="" class="btn btn-primary" >Edit</button>
+        <form method="POST" style="display: inline;" action="{{route('comments.destroy',$comment->id)}}">
+                        
+                        @csrf
+                        @method('DELETE')
+                      <button type="submit" class="btn btn-danger">Delete</button>
+                      </form>
+        <sub> created  at {{$comment->created_at}} </sub>
       </div>
 
-       <div class="comment py-2">
-        <h6 style="display: inline;" class="">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad, saepe amet perferendis, fugiat dolore obcaecati commodi corrupti ab ipsa cum est. Aliquid, cupiditate? Mollitia, cumque accusamus eius maxime debitis natus!</h6> 
-        <a href="#" class="btn btn-info">View</a>
-        <a href="#" class="btn btn-primary">Edit</a>
-        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
-         Delete
-        </button>
-        <sub> created by at </sub>
-      </div>
-
+     @endforeach
 
     </div>
   </div>

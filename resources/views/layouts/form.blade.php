@@ -15,6 +15,11 @@
   <textarea name='description'class="form-control" id="exampleFormControlTextarea1" rows="3" value="@yield('post-desc')">@yield('post-desc')</textarea>
 </div>
 <div class="mb-3">
+  <label for="exampleFormControlTextarea1" class="form-label">Image</label>
+  <input type="file" name="image" accept=".jpg,.png" class="form-control" >
+  
+</div>
+<div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">post creator</label>
   <select name='post_creator'class="form-control" id="exampleFormControlInput1" value="@yield('post-creator')">
   <option value="none" selected disabled hidden>@yield('post-creator')</option>
